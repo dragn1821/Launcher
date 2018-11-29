@@ -85,11 +85,9 @@ namespace Launcher.Scenes
                 sprite.LoadContent(content);
             }
                         
-            currentGameTitle.Text     = games[selectedIndex].Title;
             gameInfo.GameEntry        = games[selectedIndex];
             gameInfo.GamePlay         = FindGamePlay(games[selectedIndex], GetGamePath(games[selectedIndex]));
-            currentGameTitle.Origin   = new Vector2(currentGameTitle.Width / 2, currentGameTitle.Height / 2);
-            currentGameTitle.Position = new Vector2(400, 100);            
+            UpdateGameTitle(games[selectedIndex]);
             bounce.Start();
         }
         
@@ -109,9 +107,9 @@ namespace Launcher.Scenes
                             selectedIndex = games.Count - 1;
                         }
 
-                        currentGameTitle.Text = games[selectedIndex].Title;
-                        gameInfo.GameEntry    = games[selectedIndex];
-                        gameInfo.GamePlay     = FindGamePlay(games[selectedIndex], GetGamePath(games[selectedIndex]));
+                        UpdateGameTitle(games[selectedIndex]);
+                        gameInfo.GameEntry = games[selectedIndex];
+                        gameInfo.GamePlay  = FindGamePlay(games[selectedIndex], GetGamePath(games[selectedIndex]));
 
                         PlayClick();
                     }
@@ -124,9 +122,9 @@ namespace Launcher.Scenes
                             selectedIndex = 0;
                         }
 
-                        currentGameTitle.Text = games[selectedIndex].Title;
-                        gameInfo.GameEntry    = games[selectedIndex];
-                        gameInfo.GamePlay     = FindGamePlay(games[selectedIndex], GetGamePath(games[selectedIndex]));
+                        UpdateGameTitle(games[selectedIndex]);
+                        gameInfo.GameEntry = games[selectedIndex];
+                        gameInfo.GamePlay  = FindGamePlay(games[selectedIndex], GetGamePath(games[selectedIndex]));
 
                         PlayClick();
                     }
@@ -177,6 +175,14 @@ namespace Launcher.Scenes
         #endregion
 
         #region Private Methods
+
+        private void UpdateGameTitle(GameEntry entry)
+        {
+            currentGameTitle.Text     = entry.Title;
+            currentGameTitle.Origin   = new Vector2(currentGameTitle.Width / 2, currentGameTitle.Height / 2);
+            currentGameTitle.Position = new Vector2((currentGameTitle.Width / 2) + 100, 100);
+
+        }
 
         private void LaunchGame()
         {

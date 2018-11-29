@@ -45,7 +45,6 @@ namespace GameLibrary.Graphics
 
     public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
     {
-      MeasureString();
       spriteBatch.DrawString(font, Text, Position, Color * Alpha, Rotation, Origin, Scale, SpriteEffects.None, 0f);
     }
 
