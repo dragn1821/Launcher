@@ -1,6 +1,11 @@
 # Launcher
 This project is a video game launcher application that runs as a kiosk menu for Windows games.
 
+# Downloading this project
+- Copy down the repo and open in Visual Studio.
+- Right-Click on the Solution and select "Restore Nuget Packages".
+- Make sure to change the configuration manager drop down from "Any CPU" to "x86".
+
 # Features:
 - Easy configuration through JSON files.
 - Launcher monitors it's process to regain focus if it is lost.
@@ -19,8 +24,7 @@ Player 2
 - Button 1 / Button 2 = Selects the current game to play.
 
 # Configuration
-settings.json
-
+## settings.json
 This file contains general launcher settings.
 - GameDirectory    = The root folder of the location where all the games are stored. All sub-folders should be game folders.
 - MetaDataFileName = This is the name of the JSON file found in each game folder that describes information about the game.
@@ -31,14 +35,12 @@ This file contains general launcher settings.
 - CameraWidth      = The design-time width. Graphics are drawn to this resolution and then resized up to the screen resolution.
 - CameraHeight     = The design-time height. Graphics are drawn to this resolution and then resized up to the screen resolution.
 
-game-plays.json
-
+## game-plays.json
 This is the JSON file that contains the saved play count for each game.  When the launcher starts, this file is loaded and then merged with the list of games found in the game directory.  The file is only saved when a game is launched.  The launcher will manage the contents of this folder.
 - GamePath  = The full path to the game's EXE file.  This is used to uniquly identify the game.
 - PlayCount = How many times the game has been launched.
 
-metadata.json
-
+## metadata.json
 This file contains metadata on each game and is located in the game's folder.  The file name can change and is specified in the settings.json file.
 - title       = The title to display for the game in the launcher.
 - slug        = The folder name of the game.  This is used to build the full game's path.
