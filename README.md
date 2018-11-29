@@ -15,13 +15,10 @@ This project is a video game launcher application that runs as a kiosk menu for 
 - Game play counts are tracked and updated when a game is launched.
 
 # Controls:
-Player 1
-- Up / Down           = Cycle through the list of games.
-- Button 1 / Button 2 = Selects the current game to play.
-
-Player 2
-- Up / Down           = Cycle through the list of games.
-- Button 1 / Button 2 = Selects the current game to play.
+| Player | Change Game | Select Game | Exit Launcher |
+|--------|-------------|-------------|---------------|
+| 1      | Up or Down  | . or /      | End key       |
+| 2      | W or S      | ` or 1      |               |
 
 # Configuration
 ## settings.json
