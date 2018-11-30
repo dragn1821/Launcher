@@ -107,11 +107,7 @@ namespace Launcher.Scenes
                             selectedIndex = games.Count - 1;
                         }
 
-                        UpdateGameTitle(games[selectedIndex]);
-                        gameInfo.GameEntry = games[selectedIndex];
-                        gameInfo.GamePlay  = FindGamePlay(games[selectedIndex], GetGamePath(games[selectedIndex]));
-
-                        PlayClick();
+                        UpdateGameSelection();
                     }
                     else if (controllers[index].IsDirectionDown())
                     {
@@ -122,11 +118,7 @@ namespace Launcher.Scenes
                             selectedIndex = 0;
                         }
 
-                        UpdateGameTitle(games[selectedIndex]);
-                        gameInfo.GameEntry = games[selectedIndex];
-                        gameInfo.GamePlay  = FindGamePlay(games[selectedIndex], GetGamePath(games[selectedIndex]));
-
-                        PlayClick();
+                        UpdateGameSelection();
                     }
 
                     //Select a game to play:
@@ -167,6 +159,7 @@ namespace Launcher.Scenes
 
         private void CurrentProcess_Exited(object sender, EventArgs e)
         {
+            game.Log.WriteLine($"Exiting game: {baseDirectory}{games[selectedIndex].Slug}\\{games[selectedIndex].Executable}");
             currentProcess = null;
             isInputActive = true;
             PlayMusic();
@@ -181,19 +174,36 @@ namespace Launcher.Scenes
             currentGameTitle.Text     = entry.Title;
             currentGameTitle.Origin   = new Vector2(currentGameTitle.Width / 2, currentGameTitle.Height / 2);
             currentGameTitle.Position = new Vector2((currentGameTitle.Width / 2) + 100, 100);
+        }
 
+        private void UpdateGameSelection()
+        {
+            UpdateGameTitle(games[selectedIndex]);
+            gameInfo.GameEntry = games[selectedIndex];
+            gameInfo.GamePlay  = FindGamePlay(games[selectedIndex], GetGamePath(games[selectedIndex]));
+            PlayClick();
+            game.Log.WriteLine($"Changed selected game: {baseDirectory}{games[selectedIndex].Slug}\\{games[selectedIndex].Executable}");
         }
 
         private void LaunchGame()
         {
-            ProcessStartInfo info = new ProcessStartInfo();
-            info.WorkingDirectory = baseDirectory + games[selectedIndex].Slug + "\\";
-            info.FileName         = games[selectedIndex].Executable;
-            currentProcess        = new Process();
-            currentProcess.StartInfo = info;
-            currentProcess.EnableRaisingEvents = true;
-            currentProcess.Exited += new EventHandler(CurrentProcess_Exited);
-            currentProcess.Start();
+            try
+            {
+                game.Log.WriteLine($"Launching game: {baseDirectory}{games[selectedIndex].Slug}\\{games[selectedIndex].Executable}");
+                ProcessStartInfo info = new ProcessStartInfo();
+                info.WorkingDirectory = baseDirectory + games[selectedIndex].Slug + "\\";
+                info.FileName         = games[selectedIndex].Executable;
+                currentProcess        = new Process();
+                currentProcess.StartInfo = info;
+                currentProcess.EnableRaisingEvents = true;
+                currentProcess.Exited += new EventHandler(CurrentProcess_Exited);
+                currentProcess.Start();
+            }
+            catch(Exception exception)
+            {
+                game.Log.WriteException(exception);
+                CurrentProcess_Exited(this, new EventArgs());                
+            }
         }
         
         private void PlayMusic()

@@ -7,6 +7,8 @@ using GameLibrary.Scenes;
 using GameLibrary.Utilities;
 using Launcher.Components;
 using Launcher.Scenes;
+using Logger;
+using Logger.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -37,7 +39,8 @@ namespace Launcher
         public int ScreenHeight   { get { return Camera.Height; } }       
         public SoundManager Sound { get { return sound; } }
         public GraphicsDisplay GraphicsDisplay { get; private set; }
-        public Settings Settings { get; private set; }
+        public Settings Settings  { get; private set; }
+        public ILog Log           { get; private set; }
 
         #endregion
 
@@ -48,14 +51,17 @@ namespace Launcher
         }
 
         protected override void Initialize()
-        {
+        {            
             JsonManager<Settings> json = new JsonManager<Settings>();
             Settings                   = json.Load("settings.json");
+            Log                        = new Log("Log", Settings.LogPath);
             Camera                     = new Camera(GraphicsDevice, Settings.CameraWidth, Settings.CameraHeight);
             GraphicsDisplay            = new GraphicsDisplay(graphics, Window, Camera);
             GraphicsDisplay.SetResolution(Settings.ScreenWidth, Settings.ScreenHeight);
             Window.Position            = new Point(0, 0);
             Window.IsBorderless        = true;
+            Log.WriteLine("====> Starting Launcher.");
+            Log.WriteLine("====> Initialization complete.");
             base.Initialize();
         }
 
@@ -88,12 +94,16 @@ namespace Launcher
                 keyboardInput));
 
             NextScene = new LauncherSplashScene(this, Content, controllers);
+
+            Log.WriteLine("====> LoadContent complete.");
         }
 
         protected override void UnloadContent()
         {
             currentScene.UnloadContent();
             Content.Unload();
+            Log.WriteLine("====> UnloadContent complete.");
+            Log.WriteLine("====> Exiting Launcher.");
         }
 
         protected override void Update(GameTime gameTime)

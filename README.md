@@ -13,6 +13,7 @@ This project is a video game launcher application that runs as a kiosk menu for 
 - Input is blocked when a game is selected to launch and reenabled after the game's process has exited.
 - Each game has its own JSON metadata file that is read in on startup.
 - Game play counts are tracked and updated when a game is launched.
+- Logging game selection changes, game launches and exits, and exceptions when launching games.
 
 # Controls:
 | Player | Change Game | Select Game | Exit Launcher |
@@ -25,6 +26,7 @@ This project is a video game launcher application that runs as a kiosk menu for 
 This file contains general launcher settings.
 - GameDirectory    = The root folder of the location where all the games are stored. All sub-folders should be game folders.
 - MetaDataFileName = This is the name of the JSON file found in each game folder that describes information about the game.
+- LogPath          = The folder path to store log files.  This can be a relative path from the application directory.  Logs will include today's date in the file name, so a new log will be created each day.
 - ImageWidth       = The width of the game image to display.  The image is resized to this width and positioned 50 pixels from the right edge of the screen.
 - ImageHeight      = The height of the game image to display.  The image is resized to this height and positioned 50 pixels from the bottom edge of the screen.
 - ScreenWidth      = The width of the screen's resolution.

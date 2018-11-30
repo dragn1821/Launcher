@@ -4,6 +4,7 @@
     {
         public string GameDirectory    { get; set; }
         public string MetaDataFileName { get; set; }
+        public string LogPath          { get; set; }
         public int ImageWidth          { get; set; }
         public int ImageHeight         { get; set; }
         public int ScreenWidth         { get; set; }

@@ -1,6 +1,7 @@
 ﻿using GameLibrary.Audio;
 using GameLibrary.Graphics;
 using GameLibrary.Scenes;
+using Logger.Interfaces;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace GameLibrary.Interfaces
@@ -14,5 +15,6 @@ namespace GameLibrary.Interfaces
         GraphicsDevice GraphicsDevice   { get; }
         GraphicsDisplay GraphicsDisplay { get; }
         Settings Settings               { get; }
+        ILog Log                        { get; }
     }
 }
