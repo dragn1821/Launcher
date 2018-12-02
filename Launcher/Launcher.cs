@@ -12,18 +12,13 @@ using Logger.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
 
 namespace Launcher
 {
     public class Launcher : Game, IGame
     {
-        //app launches program on button press.
-        //app continues to give launched process window focus on loop.
-        //app does not lose focus on button maching evocation button.
-        //app does not double launch/stack launches on button mash.
-
-
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
         private Scene currentScene = null;
@@ -115,21 +110,28 @@ namespace Launcher
                 Exit();
             }
 
-            if (NextScene != null)
-            {
-                if (currentScene != null)
+            try
+            { 
+                if (NextScene != null)
                 {
-                    currentScene.UnloadContent();
+                    if (currentScene != null)
+                    {
+                        currentScene.UnloadContent();
+                    }
+
+                    currentScene = NextScene;
+                    NextScene    = null;
+
+                    currentScene.LoadContent();
                 }
-
-                currentScene = NextScene;
-                NextScene    = null;
-
-                currentScene.LoadContent();
+            
+                currentScene.Update(gameTime);
             }
-            
-            
-            currentScene.Update(gameTime);
+            catch(Exception exception)
+            {
+                Log.WriteException(exception);
+            }
+
             base.Update(gameTime);
         }
 

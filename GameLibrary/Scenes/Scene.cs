@@ -34,7 +34,7 @@ namespace GameLibrary.Scenes
 
     #region Public Methods
 
-    public void UnloadContent()
+    public virtual void UnloadContent()
     {
       content.Unload();
     }

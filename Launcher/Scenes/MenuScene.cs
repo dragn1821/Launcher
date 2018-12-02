@@ -66,7 +66,7 @@ namespace Launcher.Scenes
             };
             this.gameInfo = new GameInfo();
 
-            this.baseDirectory = game.Settings.GameDirectory;
+            this.baseDirectory = game.Settings.GameDirectory.Replace('/', '\\');
 
             bounce = new Bounce(currentGameTitle, 0.05f, 1.15f);
             PlayMusic();
@@ -90,7 +90,17 @@ namespace Launcher.Scenes
             UpdateGameTitle(games[selectedIndex]);
             bounce.Start();
         }
-        
+
+        public override void UnloadContent()
+        {
+            if (currentProcess != null)
+            {
+                CloseGame("UnloadContent");
+            }
+
+            base.UnloadContent();
+        }
+
         public override void Update(GameTime gameTime)
         {
             if (isInputActive)
@@ -159,7 +169,7 @@ namespace Launcher.Scenes
 
         private void CurrentProcess_Exited(object sender, EventArgs e)
         {
-            game.Log.WriteLine($"Exiting game: {baseDirectory}{games[selectedIndex].Slug}\\{games[selectedIndex].Executable}");
+            game.Log.WriteLine($"Exiting game: {Path.Combine(baseDirectory, games[selectedIndex].Slug, games[selectedIndex].Executable)}");
             currentProcess = null;
             isInputActive = true;
             PlayMusic();
@@ -182,16 +192,21 @@ namespace Launcher.Scenes
             gameInfo.GameEntry = games[selectedIndex];
             gameInfo.GamePlay  = FindGamePlay(games[selectedIndex], GetGamePath(games[selectedIndex]));
             PlayClick();
-            game.Log.WriteLine($"Changed selected game: {baseDirectory}{games[selectedIndex].Slug}\\{games[selectedIndex].Executable}");
+            game.Log.WriteLine($"Changed selected game: {Path.Combine(baseDirectory, games[selectedIndex].Slug, games[selectedIndex].Executable)}");
         }
 
         private void LaunchGame()
         {
             try
             {
-                game.Log.WriteLine($"Launching game: {baseDirectory}{games[selectedIndex].Slug}\\{games[selectedIndex].Executable}");
+                if (currentProcess != null)
+                {
+                    CloseGame("LaunchGame");
+                }
+                               
+                game.Log.WriteLine($"Launching game: {Path.Combine(baseDirectory, games[selectedIndex].Slug, games[selectedIndex].Executable)}");
                 ProcessStartInfo info = new ProcessStartInfo();
-                info.WorkingDirectory = baseDirectory + games[selectedIndex].Slug + "\\";
+                info.WorkingDirectory = Path.Combine(baseDirectory, games[selectedIndex].Slug);
                 info.FileName         = games[selectedIndex].Executable;
                 currentProcess        = new Process();
                 currentProcess.StartInfo = info;
@@ -205,7 +220,14 @@ namespace Launcher.Scenes
                 CurrentProcess_Exited(this, new EventArgs());                
             }
         }
-        
+
+        private void CloseGame(string methodName)
+        {
+            currentProcess.Close();
+            currentProcess = null;
+            game.Log.WriteLine($"{methodName}: Exiting game: {Path.Combine(baseDirectory, games[selectedIndex].Slug, games[selectedIndex].Executable)}");
+        }
+
         private void PlayMusic()
         {
             game.Sound.PlaySong("music", true);
@@ -227,14 +249,15 @@ namespace Launcher.Scenes
 
             foreach(string directory in directories)
             {
-                string filename = directory + game.Settings.MetaDataFileName;
+                string filename = Path.Combine(directory, game.Settings.MetaDataFileName);
 
                 if (File.Exists(filename))
                 {
-                    GameEntry entry = jsonGameEntries.Load(filename);
-                    games.Add(entry);
+                    GameEntry entry  = jsonGameEntries.Load(filename);
+                    entry.Executable = entry.Executable.Replace('/', '\\');
+                    games.Add(entry);                    
 
-                    string imageFile = directory + "\\" + entry.Image_URL;
+                    string imageFile = Path.Combine(directory, entry.Image_URL);
                     
                     if (File.Exists(imageFile) == false)
                     {
@@ -243,7 +266,7 @@ namespace Launcher.Scenes
 
                     gameImages.Add(new ResizableSprite(game.GraphicsDevice)
                     {
-                        ResourceName = imageFile,
+                        ResourceName = imageFile.Replace('/', '\\'),
                         Position     = new Vector2(ScreenWidth - game.Settings.ImageWidth - 50, ScreenHeight - game.Settings.ImageHeight - 50),
                         TargetWidth  = game.Settings.ImageWidth,
                         TargetHeight = game.Settings.ImageHeight
@@ -292,7 +315,7 @@ namespace Launcher.Scenes
 
         private string GetGamePath(GameEntry entry)
         {
-            return game.Settings.GameDirectory + entry.Slug + "\\" + entry.Executable;
+            return Path.Combine(baseDirectory, entry.Slug, entry.Executable);
         }
 
         private bool IsProcessInFocus()

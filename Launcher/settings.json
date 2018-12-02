@@ -1,7 +1,7 @@
 ﻿{
-  "GameDirectory": "C:\\WINNITRON_UserData\\Playlists\\whatever\\",
-  "MetaDataFileName": "\\winnitron_metadata.json",
-  "LogPath":  "Logs\\",
+  "GameDirectory": "C:\\WINNITRON_UserData\\Playlists\\whatever",
+  "MetaDataFileName": "winnitron_metadata.json",
+  "LogPath":  "Logs",
   "ImageWidth": 1280,
   "ImageHeight": 720,
   "ScreenWidth": 1920,
