@@ -60,6 +60,7 @@ namespace Launcher.Scenes
         private float selectedImageHighlightAlpha;
         private Rectangle titleBackground;
         private float titleBackgroundAlpha;
+        private Sprite logo;
 
         public MenuScene(IGame game, ContentManager content, Dictionary<int, Controller> controllers) : base(game, content, controllers)
         {
@@ -78,6 +79,10 @@ namespace Launcher.Scenes
             {
                 ResourceName = "background"
             };
+            this.logo = new Sprite()
+            {
+                ResourceName = "stl-arcade-jam-logo"
+            };
             this.gameInfo = new GameInfo();
 
             this.baseDirectory  = game.Settings.GameDirectory.Replace('/', '\\');
@@ -85,7 +90,6 @@ namespace Launcher.Scenes
             this.titleBackgroundAlpha        = 0.6f;
 
             bounce = new Bounce(currentGameTitle, 0.05f, 1.15f);
-            PlayMusic();
         }
 
         public override void LoadContent()
@@ -93,6 +97,7 @@ namespace Launcher.Scenes
             LoadGames();
             LoadGamePlays();
             backgroundSprite.LoadContent(content);
+            logo.LoadContent(content);
             currentGameTitle.LoadContent(content);
             gameInfo.LoadContent(content);
             pixel = content.Load<Texture2D>("1px");
@@ -102,8 +107,11 @@ namespace Launcher.Scenes
                 sprite.LoadContent(content);
             }
 
-            selectedImageHighlight = new Rectangle(ScreenWidth - game.Settings.ImageWidth - PIXELS_FOR_IMAGE_POSITIONING - SELECTED_PADDING, (ScreenHeight / 2) - (game.Settings.ImageHeight / 2) - SELECTED_PADDING, game.Settings.ImageWidth + (SELECTED_PADDING * 2), game.Settings.ImageHeight + (SELECTED_PADDING * 2));
+            int x = ScreenWidth - game.Settings.ImageWidth - PIXELS_FOR_IMAGE_POSITIONING - SELECTED_PADDING;
+
+            selectedImageHighlight = new Rectangle(x, (ScreenHeight / 2) - (game.Settings.ImageHeight / 2) - SELECTED_PADDING, game.Settings.ImageWidth + (SELECTED_PADDING * 2), game.Settings.ImageHeight + (SELECTED_PADDING * 2));
             titleBackground        = new Rectangle(0, 47, ScreenWidth, 106);
+            logo.Position          = new Vector2((x / 2) - (logo.Width / 2), ScreenHeight - logo.Height);
 
             gameInfo.MaxGames = games.Count;
 
@@ -180,6 +188,7 @@ namespace Launcher.Scenes
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             backgroundSprite.Draw(gameTime, spriteBatch);
+            logo.Draw(gameTime, spriteBatch);
             previousImage2.Draw(gameTime, spriteBatch);
             previousImage1.Draw(gameTime, spriteBatch);
             nextImage2.Draw(gameTime, spriteBatch);

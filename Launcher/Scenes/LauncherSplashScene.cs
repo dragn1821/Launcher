@@ -10,7 +10,8 @@ namespace Launcher.Scenes
     {
         public LauncherSplashScene(IGame game, ContentManager content, Dictionary<int, Controller> controllers) : base(game, content, controllers)
         {            
-            sprite.ResourceName = "splashscene";
+            sprite.ResourceName = "stl-arcade-jam-splash-screen";
+            game.Sound.PlaySong("music", true);
         }
 
         #region Overrides
