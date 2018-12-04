@@ -1,5 +1,6 @@
 ﻿using GameLibrary.Audio;
 using GameLibrary.Graphics;
+using GameLibrary.Input;
 using GameLibrary.Scenes;
 using Logger.Interfaces;
 using Microsoft.Xna.Framework.Graphics;
@@ -16,5 +17,6 @@ namespace GameLibrary.Interfaces
         GraphicsDisplay GraphicsDisplay { get; }
         Settings Settings               { get; }
         ILog Log                        { get; }
+        KeyboardInput KeyboardInput     { get; }
     }
 }

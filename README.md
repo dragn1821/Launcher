@@ -18,10 +18,10 @@ This project is a video game launcher application that runs as a kiosk menu for 
 - Logging game selection changes, game launches and exits, and exceptions when launching games.
 
 # Controls:
-| Player | Change Game | Select Game | Exit Launcher |
-|--------|-------------|-------------|---------------|
-| 1      | Up or Down  | . or /      | End key       |
-| 2      | W or S      | ` or 1      |               |
+| Player | Change Game | Select Game   | Exit Launcher |
+|--------|-------------|---------------|---------------|
+| 1      | Up or Down  | . or / or ESC | End key       |
+| 2      | W or S      | ` or 1 or ESC |               |
 
 # Configuration
 ## settings.json

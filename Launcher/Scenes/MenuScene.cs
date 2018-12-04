@@ -8,6 +8,7 @@ using Launcher.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -132,7 +133,7 @@ namespace Launcher.Scenes
                     }
 
                     //Select a game to play:
-                    if (controllers[index].IsButton1Pressed() || controllers[index].IsButton2Pressed())
+                    if (controllers[index].IsButton1Pressed() || controllers[index].IsButton2Pressed() || game.KeyboardInput.IsKeyPressed(Keys.Escape))
                     {
                         isInputActive = false;
                         StopMusic();

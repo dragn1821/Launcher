@@ -22,21 +22,21 @@ namespace Launcher
     {
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
-        private Scene currentScene = null;
-        private KeyboardInput keyboardInput;
+        private Scene currentScene = null;        
         private Dictionary<int, Controller> controllers;
         private SoundManager sound;
 
         #region IGame implementation
 
-        public Scene NextScene    { private get; set; }
-        public Camera Camera      { get; private set; }
-        public int ScreenWidth    { get { return Camera.Width; } }
-        public int ScreenHeight   { get { return Camera.Height; } }       
-        public SoundManager Sound { get { return sound; } }
+        public Scene NextScene                 { private get; set; }
+        public Camera Camera                   { get; private set; }
+        public int ScreenWidth                 { get { return Camera.Width; } }
+        public int ScreenHeight                { get { return Camera.Height; } }       
+        public SoundManager Sound              { get { return sound; } }
         public GraphicsDisplay GraphicsDisplay { get; private set; }
-        public Settings Settings  { get; private set; }
-        public ILog Log           { get; private set; }
+        public Settings Settings               { get; private set; }
+        public ILog Log                        { get; private set; }
+        public KeyboardInput KeyboardInput     { get; private set; }
 
         #endregion
 
@@ -65,7 +65,7 @@ namespace Launcher
         protected override void LoadContent()
         {
             spriteBatch   = new SpriteBatch(GraphicsDevice);
-            keyboardInput = new KeyboardInput();
+            KeyboardInput = new KeyboardInput();
             controllers   = new Dictionary<int, Controller>();
             sound         = new Sounds();
             sound.LoadContent(Content);
@@ -78,7 +78,7 @@ namespace Launcher
                     Keys.Left,
                     Keys.OemQuestion,
                     Keys.OemPeriod),
-                keyboardInput));
+                KeyboardInput));
 
             controllers.Add(2, new Controller(
                 new KeyboardMapping(
@@ -88,7 +88,7 @@ namespace Launcher
                     Keys.A,
                     Keys.D1,
                     Keys.OemTilde),
-                keyboardInput));
+                KeyboardInput));
 
             NextScene = new LauncherSplashScene(this, Content, controllers);
 
@@ -105,9 +105,9 @@ namespace Launcher
 
         protected override void Update(GameTime gameTime)
         {
-            keyboardInput.Update(gameTime);
+            KeyboardInput.Update(gameTime);
 
-            if (keyboardInput.IsKeyPressed(Keys.End))
+            if (KeyboardInput.IsKeyPressed(Keys.End))
             {
                 Exit();
             }
