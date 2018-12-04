@@ -86,7 +86,7 @@ namespace Launcher.Scenes
             this.gameInfo = new GameInfo();
 
             this.baseDirectory  = game.Settings.GameDirectory.Replace('/', '\\');
-            this.selectedImageHighlightAlpha = 0.3f;
+            this.selectedImageHighlightAlpha = 0.7f;
             this.titleBackgroundAlpha        = 0.6f;
 
             bounce = new Bounce(currentGameTitle, 0.05f, 1.15f);
@@ -193,7 +193,7 @@ namespace Launcher.Scenes
             previousImage1.Draw(gameTime, spriteBatch);
             nextImage2.Draw(gameTime, spriteBatch);
             nextImage1.Draw(gameTime, spriteBatch);
-            spriteBatch.Draw(pixel, selectedImageHighlight, Color.Yellow * selectedImageHighlightAlpha);
+            spriteBatch.Draw(pixel, selectedImageHighlight, Color.White * selectedImageHighlightAlpha);
             selectedImage.Draw(gameTime, spriteBatch);
             spriteBatch.Draw(pixel, titleBackground, Color.Black * titleBackgroundAlpha);
             currentGameTitle.Draw(gameTime, spriteBatch);

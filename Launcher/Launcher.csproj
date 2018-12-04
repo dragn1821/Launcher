@@ -73,6 +73,8 @@
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
     <None Include="app.manifest" />
+    <None Include="Content\Fonts\emulogic.spritefont" />
+    <None Include="Content\Fonts\emulogic.ttf" />
     <None Include="Content\Fonts\GameInfo.spritefont" />
     <None Include="Content\Fonts\GameTitle.spritefont" />
     <Content Include="settings.json">

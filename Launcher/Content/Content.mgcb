@@ -99,3 +99,10 @@
 /processorParam:TextureFormat=Color
 /build:stl-arcade-jam-splash-screen.png
 
+#begin Fonts/emulogic.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/emulogic.spritefont
+
