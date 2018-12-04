@@ -10,6 +10,8 @@ namespace Launcher.Components
         private Label playCount;
         private Label minPlayers;
         private Label maxPlayers;
+        private Label gameNumber;
+        private int maxGames;
 
         public GameEntry GameEntry
         {
@@ -25,6 +27,22 @@ namespace Launcher.Components
             set
             {
                 playCount.Text = $"Play Count:  {value.PlayCount}";
+            }
+        }
+
+        public int CurrentGame
+        {
+            set
+            {
+                gameNumber.Text = $"Game {value + 1} of {maxGames}";
+            }
+        }
+
+        public int MaxGames
+        {
+            set
+            {
+                maxGames = value;
             }
         }
 
@@ -50,6 +68,13 @@ namespace Launcher.Components
                 Text         = "Max Players: 2",
                 Position     = new Vector2(100, 400)
             };
+
+            gameNumber = new Label()
+            {
+                ResourceName = "Fonts/GameInfo",
+                Text         = "Game 0 of 0",
+                Position     = new Vector2(100, 450)
+            };
         }
 
         public void LoadContent(ContentManager content)
@@ -57,6 +82,7 @@ namespace Launcher.Components
             playCount.LoadContent(content);
             minPlayers.LoadContent(content);
             maxPlayers.LoadContent(content);
+            gameNumber.LoadContent(content);
         }
                 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -64,6 +90,7 @@ namespace Launcher.Components
             playCount.Draw(gameTime, spriteBatch);
             minPlayers.Draw(gameTime, spriteBatch);
             maxPlayers.Draw(gameTime, spriteBatch);
+            gameNumber.Draw(gameTime, spriteBatch);
         }
     }
 }

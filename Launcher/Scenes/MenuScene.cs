@@ -34,6 +34,9 @@ namespace Launcher.Scenes
 
         #endregion
 
+        private const int PIXELS_FOR_IMAGE_POSITIONING = 80;
+        private const int SELECTED_PADDING             = 20;
+
         private JsonManager<GameEntry> jsonGameEntries;
         private JsonManager<List<GamePlay>> jsonGamePlays;
         private bool isInputActive = true;
@@ -47,6 +50,16 @@ namespace Launcher.Scenes
         private Sprite backgroundSprite;
         private Bounce bounce;
         private GameInfo gameInfo;
+        private ResizableSprite selectedImage;
+        private ResizableSprite previousImage1;
+        private ResizableSprite previousImage2;
+        private ResizableSprite nextImage1;
+        private ResizableSprite nextImage2;
+        private Rectangle selectedImageHighlight;
+        private Texture2D pixel;
+        private float selectedImageHighlightAlpha;
+        private Rectangle titleBackground;
+        private float titleBackgroundAlpha;
 
         public MenuScene(IGame game, ContentManager content, Dictionary<int, Controller> controllers) : base(game, content, controllers)
         {
@@ -67,7 +80,9 @@ namespace Launcher.Scenes
             };
             this.gameInfo = new GameInfo();
 
-            this.baseDirectory = game.Settings.GameDirectory.Replace('/', '\\');
+            this.baseDirectory  = game.Settings.GameDirectory.Replace('/', '\\');
+            this.selectedImageHighlightAlpha = 0.3f;
+            this.titleBackgroundAlpha        = 0.6f;
 
             bounce = new Bounce(currentGameTitle, 0.05f, 1.15f);
             PlayMusic();
@@ -80,15 +95,19 @@ namespace Launcher.Scenes
             backgroundSprite.LoadContent(content);
             currentGameTitle.LoadContent(content);
             gameInfo.LoadContent(content);
+            pixel = content.Load<Texture2D>("1px");
 
             foreach (ResizableSprite sprite in gameImages)
             {
                 sprite.LoadContent(content);
             }
-                        
-            gameInfo.GameEntry        = games[selectedIndex];
-            gameInfo.GamePlay         = FindGamePlay(games[selectedIndex], GetGamePath(games[selectedIndex]));
-            UpdateGameTitle(games[selectedIndex]);
+
+            selectedImageHighlight = new Rectangle(ScreenWidth - game.Settings.ImageWidth - PIXELS_FOR_IMAGE_POSITIONING - SELECTED_PADDING, (ScreenHeight / 2) - (game.Settings.ImageHeight / 2) - SELECTED_PADDING, game.Settings.ImageWidth + (SELECTED_PADDING * 2), game.Settings.ImageHeight + (SELECTED_PADDING * 2));
+            titleBackground        = new Rectangle(0, 47, ScreenWidth, 106);
+
+            gameInfo.MaxGames = games.Count;
+
+            UpdateCurrentGameSelection();
             bounce.Start();
         }
 
@@ -161,7 +180,13 @@ namespace Launcher.Scenes
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             backgroundSprite.Draw(gameTime, spriteBatch);
-            gameImages[selectedIndex].Draw(gameTime, spriteBatch);
+            previousImage2.Draw(gameTime, spriteBatch);
+            previousImage1.Draw(gameTime, spriteBatch);
+            nextImage2.Draw(gameTime, spriteBatch);
+            nextImage1.Draw(gameTime, spriteBatch);
+            spriteBatch.Draw(pixel, selectedImageHighlight, Color.Yellow * selectedImageHighlightAlpha);
+            selectedImage.Draw(gameTime, spriteBatch);
+            spriteBatch.Draw(pixel, titleBackground, Color.Black * titleBackgroundAlpha);
             currentGameTitle.Draw(gameTime, spriteBatch);
             gameInfo.Draw(gameTime, spriteBatch);
         }
@@ -175,10 +200,34 @@ namespace Launcher.Scenes
             isInputActive = true;
             PlayMusic();
         }
-
+        
         #endregion
 
         #region Private Methods
+
+        private int GetPreviousIndex(int number)
+        {
+            int newIndex = selectedIndex - number;
+
+            if (newIndex < 0)
+            {
+                newIndex = gameImages.Count - (newIndex * -1);
+            }
+
+            return newIndex;
+        }
+
+        private int GetNextIndex(int number)
+        {
+            int newIndex = number + selectedIndex;
+
+            if (newIndex >= gameImages.Count)
+            {
+                newIndex = Math.Abs(gameImages.Count - newIndex);
+            }
+
+            return newIndex;
+        }
 
         private void UpdateGameTitle(GameEntry entry)
         {
@@ -186,14 +235,54 @@ namespace Launcher.Scenes
             currentGameTitle.Origin   = new Vector2(currentGameTitle.Width / 2, currentGameTitle.Height / 2);
             currentGameTitle.Position = new Vector2((currentGameTitle.Width / 2) + 100, 100);
         }
-
+               
         private void UpdateGameSelection()
         {
-            UpdateGameTitle(games[selectedIndex]);
-            gameInfo.GameEntry = games[selectedIndex];
-            gameInfo.GamePlay  = FindGamePlay(games[selectedIndex], GetGamePath(games[selectedIndex]));
+            UpdateCurrentGameSelection();            
             PlayClick();
             game.Log.WriteLine($"Changed selected game: {Path.Combine(baseDirectory, games[selectedIndex].Slug, games[selectedIndex].Executable)}");
+        }
+
+        private void UpdateCurrentGameSelection()
+        {
+            //Get selected image and resize/reposition.
+            selectedImage              = gameImages[selectedIndex];
+            selectedImage.TargetWidth  = game.Settings.ImageWidth;
+            selectedImage.TargetHeight = game.Settings.ImageHeight;
+            selectedImage.Position     = new Vector2(ScreenWidth - game.Settings.ImageWidth - PIXELS_FOR_IMAGE_POSITIONING, (ScreenHeight / 2) - (game.Settings.ImageHeight / 2));
+
+            //Get one level before and after selected image and resize/reposition.
+            if (gameImages.Count > 2)
+            { 
+                previousImage1              = gameImages[GetPreviousIndex(1)];
+                previousImage1.TargetWidth  = game.Settings.ImageWidth - PIXELS_FOR_IMAGE_POSITIONING;
+                previousImage1.TargetHeight = game.Settings.ImageHeight - PIXELS_FOR_IMAGE_POSITIONING;
+                previousImage1.Position     = new Vector2(selectedImage.Position.X + (PIXELS_FOR_IMAGE_POSITIONING / 2), selectedImage.Position.Y - PIXELS_FOR_IMAGE_POSITIONING);
+
+                nextImage1              = gameImages[GetNextIndex(1)];
+                nextImage1.TargetWidth  = game.Settings.ImageWidth - PIXELS_FOR_IMAGE_POSITIONING;
+                nextImage1.TargetHeight = game.Settings.ImageHeight - PIXELS_FOR_IMAGE_POSITIONING;
+                nextImage1.Position     = new Vector2(selectedImage.Position.X + (PIXELS_FOR_IMAGE_POSITIONING / 2), selectedImage.Position.Y + (PIXELS_FOR_IMAGE_POSITIONING * 2));
+            }
+
+            //Get two levels before and after selected image and resize/reposition.
+            if (gameImages.Count > 5)
+            { 
+                previousImage2              = gameImages[GetPreviousIndex(2)];
+                previousImage2.TargetWidth  = game.Settings.ImageWidth - (PIXELS_FOR_IMAGE_POSITIONING * 2);
+                previousImage2.TargetHeight = game.Settings.ImageHeight - (PIXELS_FOR_IMAGE_POSITIONING * 2);
+                previousImage2.Position     = new Vector2(selectedImage.Position.X + PIXELS_FOR_IMAGE_POSITIONING, selectedImage.Position.Y - (PIXELS_FOR_IMAGE_POSITIONING * 2));
+
+                nextImage2              = gameImages[GetNextIndex(2)];
+                nextImage2.TargetWidth  = game.Settings.ImageWidth - (PIXELS_FOR_IMAGE_POSITIONING * 2);
+                nextImage2.TargetHeight = game.Settings.ImageHeight - (PIXELS_FOR_IMAGE_POSITIONING * 2);
+                nextImage2.Position     = new Vector2(selectedImage.Position.X + PIXELS_FOR_IMAGE_POSITIONING, selectedImage.Position.Y + (PIXELS_FOR_IMAGE_POSITIONING * 4));
+            }
+
+            UpdateGameTitle(games[selectedIndex]);
+            gameInfo.CurrentGame = selectedIndex;
+            gameInfo.GameEntry   = games[selectedIndex];
+            gameInfo.GamePlay    = FindGamePlay(games[selectedIndex], GetGamePath(games[selectedIndex]));
         }
 
         private void LaunchGame()
@@ -267,10 +356,7 @@ namespace Launcher.Scenes
 
                     gameImages.Add(new ResizableSprite(game.GraphicsDevice)
                     {
-                        ResourceName = imageFile.Replace('/', '\\'),
-                        Position     = new Vector2(ScreenWidth - game.Settings.ImageWidth - 50, ScreenHeight - game.Settings.ImageHeight - 50),
-                        TargetWidth  = game.Settings.ImageWidth,
-                        TargetHeight = game.Settings.ImageHeight
+                        ResourceName = imageFile.Replace('/', '\\')
                     });
                 }
             }
