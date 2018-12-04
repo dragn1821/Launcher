@@ -14,6 +14,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Launcher
 {
@@ -57,6 +58,7 @@ namespace Launcher
             Window.IsBorderless        = true;
             Log.WriteLine("====> Starting Launcher.");
             Log.WriteLine("====> Initialization complete.");
+            ValidateSettings();
             base.Initialize();
         }
 
@@ -140,6 +142,14 @@ namespace Launcher
             Camera.Draw(gameTime, spriteBatch, currentScene);
             GraphicsDisplay.Draw(spriteBatch);
             base.Draw(gameTime);
+        }
+
+        private void ValidateSettings()
+        {
+            if (string.IsNullOrEmpty(Settings.GameDirectory) || Directory.Exists(Settings.GameDirectory) == false)
+            {
+                throw new Exception("The 'GameDirectory' must have a value and point to an existing directory of games.");
+            }
         }
     }
 }

@@ -5,6 +5,8 @@ This project is a video game launcher application that runs as a kiosk menu for 
 - Copy down the repo and open in Visual Studio.
 - Right-Click on the Solution and select "Restore Nuget Packages".
 - Make sure to change the configuration manager drop down from "Any CPU" to "x86".
+- The "settings.json" file has a "GameDirectory" property that needs to point to a folder that contains the games.
+- The "settings.json" file has a "MetaDataFileName" property that is the file name of the JSON file that each game must have to work with this launcher. If a game does not have this file in its folder, it will be skipped.
 
 # Features:
 - Easy configuration through JSON files.
@@ -35,7 +37,7 @@ This file contains general launcher settings.
 - CameraHeight     = The design-time height. Graphics are drawn to this resolution and then resized up to the screen resolution.
 
 ## game-plays.json
-This is the JSON file that contains the saved play count for each game.  When the launcher starts, this file is loaded and then merged with the list of games found in the game directory.  The file is only saved when a game is launched.  The launcher will manage the contents of this folder.
+This is the JSON file that contains the saved play count for each game.  When the launcher starts, this file is loaded and then merged with the list of games found in the game directory.  The file is only saved when a game is launched.  The launcher will manage the contents of this file.
 - GamePath  = The full path to the game's EXE file.  This is used to uniquly identify the game.
 - PlayCount = How many times the game has been launched.
 
@@ -51,3 +53,8 @@ This file contains metadata on each game and is located in the game's folder.  T
 # Versions:
 - .NET 4.5
 - Monogame 3.6
+
+# Assets:
+The following assets were used from the links below.  Both are Public Domain without any copyright by the creator.
+- https://opengameart.org/content/skulls-adventure-music
+- https://opengameart.org/content/mouse-click
