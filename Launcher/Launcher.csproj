@@ -59,12 +59,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\1px.png" />
+    <Content Include="Content\arcade_dash.mp3" />
     <Content Include="Content\background.png" />
     <Content Include="Content\click.wav" />
     <Content Include="Content\default-image.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\music.mp3" />
     <Content Include="Content\splashscene.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>

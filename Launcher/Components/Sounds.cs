@@ -10,7 +10,7 @@ namespace Launcher.Components
         public override void LoadContent(ContentManager content)
         {
             //music
-            songs.Add("music", content.Load<Song>("music"));
+            songs.Add("music", content.Load<Song>("arcade_dash"));
 
             //sound effects
             soundEffects.Add("click", content.Load<SoundEffect>("click"));

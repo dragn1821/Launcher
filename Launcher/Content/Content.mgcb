@@ -56,12 +56,6 @@
 /processorParam:TextureFormat=Color
 /build:splashscene.png
 
-#begin music.mp3
-/importer:Mp3Importer
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:music.mp3
-
 #begin click.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -86,4 +80,10 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:1px.png
+
+#begin arcade_dash.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:arcade_dash.mp3
 
