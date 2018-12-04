@@ -56,5 +56,5 @@ This file contains metadata on each game and is located in the game's folder.  T
 
 # Assets:
 The following assets were used from the links below.  Both are Public Domain without any copyright by the creator.
-- Music: Arcade Dash
+- Music: Arcade Dash created by Rob "Splycer" Smith.
 - Sound Effect: https://opengameart.org/content/mouse-click
