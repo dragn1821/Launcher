@@ -9,13 +9,25 @@ namespace GameLibrary.Graphics
     public class ResizableSprite : Sprite
     {
         private GraphicsDevice graphicsDevice;
-
-        public int TargetWidth  { get; set; }
-        public int TargetHeight { get; set; }
+        private int targetWidth;
+        private int targetHeight;
+        private Rectangle rectangle;
+        private Texture2D barTexture;
 
         public ResizableSprite(GraphicsDevice graphicsDevice) : base()
         {
             this.graphicsDevice = graphicsDevice;
+            this.targetWidth    = 0;
+            this.targetHeight   = 0;
+            this.barTexture     = new Texture2D(graphicsDevice, 1, 1);
+            this.barTexture.SetData(new[] { Color.Black });
+        }
+
+        public void SetTargetSize(int width, int height)
+        {
+            targetWidth  = width;
+            targetHeight = height;
+            UpdateAspectRatio();
         }
 
         #region Overrides
@@ -29,18 +41,44 @@ namespace GameLibrary.Graphics
 
             using (FileStream fileStream = new FileStream(ResourceName, FileMode.Open))
             {
-                texture = Texture2D.FromStream(graphicsDevice, fileStream);
-                Width   = texture.Width;
-                Height  = texture.Height;
+                texture      = Texture2D.FromStream(graphicsDevice, fileStream);
+                Width        = texture.Width;
+                targetWidth  = texture.Width;
+                Height       = texture.Height;
+                targetHeight = texture.Height;                
             }
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            int width  = (TargetWidth == 0) ? texture.Width : TargetWidth;
-            int height = (TargetHeight == 0) ? texture.Height : TargetHeight;
+            int width  = (targetWidth == 0) ? texture.Width : targetWidth;
+            int height = (targetHeight == 0) ? texture.Height : targetHeight;
 
-            spriteBatch.Draw(texture, new Rectangle((int)Position.X, (int)Position.Y, width, height), new Rectangle(0, 0, texture.Width, texture.Height), Color * Alpha);
+            spriteBatch.Draw(barTexture, new Rectangle((int)Position.X, (int)Position.Y, width, height), Color.Black);
+            spriteBatch.Draw(texture, new Rectangle(rectangle.X + (int)Position.X, rectangle.Y + (int)Position.Y, rectangle.Width, rectangle.Height), new Rectangle(0, 0, texture.Width, texture.Height), Color * Alpha);
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private void UpdateAspectRatio()
+        {
+            float sourceAspect = Width / (float)Height;
+            float targetAspect = targetWidth / (float)targetHeight;
+
+            if (targetAspect <= sourceAspect)
+            {
+                int presentHeight = (int)((targetWidth / sourceAspect) + 0.5f);
+                int barHeight     = (targetHeight - presentHeight) / 2;
+                rectangle         = new Rectangle(0, barHeight, targetWidth, presentHeight);
+            }
+            else
+            {
+                int presentWidth = (int)((targetHeight * sourceAspect) + 0.5f);
+                int barWidth     = (targetWidth - presentWidth) / 2;
+                rectangle        = new Rectangle(barWidth, 0, presentWidth, targetHeight);
+            }
         }
 
         #endregion

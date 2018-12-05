@@ -288,21 +288,18 @@ namespace Launcher.Scenes
         {
             //Get selected image and resize/reposition.
             selectedImage              = gameImages[selectedIndex];
-            selectedImage.TargetWidth  = game.Settings.ImageWidth;
-            selectedImage.TargetHeight = game.Settings.ImageHeight;
+            selectedImage.SetTargetSize(game.Settings.ImageWidth, game.Settings.ImageHeight);
             selectedImage.Position     = new Vector2(ScreenWidth - game.Settings.ImageWidth - PIXELS_FOR_IMAGE_POSITIONING, (ScreenHeight / 2) - (game.Settings.ImageHeight / 2));
 
             //Get one level before and after selected image and resize/reposition.
             if (gameImages.Count > 2)
             { 
                 previousImage1              = gameImages[GetPreviousIndex(1)];
-                previousImage1.TargetWidth  = game.Settings.ImageWidth - PIXELS_FOR_IMAGE_POSITIONING;
-                previousImage1.TargetHeight = game.Settings.ImageHeight - PIXELS_FOR_IMAGE_POSITIONING;
+                previousImage1.SetTargetSize(game.Settings.ImageWidth - PIXELS_FOR_IMAGE_POSITIONING, game.Settings.ImageHeight - PIXELS_FOR_IMAGE_POSITIONING);
                 previousImage1.Position     = new Vector2(selectedImage.Position.X + (PIXELS_FOR_IMAGE_POSITIONING / 2), selectedImage.Position.Y - PIXELS_FOR_IMAGE_POSITIONING);
 
                 nextImage1              = gameImages[GetNextIndex(1)];
-                nextImage1.TargetWidth  = game.Settings.ImageWidth - PIXELS_FOR_IMAGE_POSITIONING;
-                nextImage1.TargetHeight = game.Settings.ImageHeight - PIXELS_FOR_IMAGE_POSITIONING;
+                nextImage1.SetTargetSize(game.Settings.ImageWidth - PIXELS_FOR_IMAGE_POSITIONING, game.Settings.ImageHeight - PIXELS_FOR_IMAGE_POSITIONING);
                 nextImage1.Position     = new Vector2(selectedImage.Position.X + (PIXELS_FOR_IMAGE_POSITIONING / 2), selectedImage.Position.Y + (PIXELS_FOR_IMAGE_POSITIONING * 2));
             }
 
@@ -310,13 +307,11 @@ namespace Launcher.Scenes
             if (gameImages.Count > 5)
             { 
                 previousImage2              = gameImages[GetPreviousIndex(2)];
-                previousImage2.TargetWidth  = game.Settings.ImageWidth - (PIXELS_FOR_IMAGE_POSITIONING * 2);
-                previousImage2.TargetHeight = game.Settings.ImageHeight - (PIXELS_FOR_IMAGE_POSITIONING * 2);
+                previousImage2.SetTargetSize(game.Settings.ImageWidth - (PIXELS_FOR_IMAGE_POSITIONING * 2), game.Settings.ImageHeight - (PIXELS_FOR_IMAGE_POSITIONING * 2));
                 previousImage2.Position     = new Vector2(selectedImage.Position.X + PIXELS_FOR_IMAGE_POSITIONING, selectedImage.Position.Y - (PIXELS_FOR_IMAGE_POSITIONING * 2));
 
                 nextImage2              = gameImages[GetNextIndex(2)];
-                nextImage2.TargetWidth  = game.Settings.ImageWidth - (PIXELS_FOR_IMAGE_POSITIONING * 2);
-                nextImage2.TargetHeight = game.Settings.ImageHeight - (PIXELS_FOR_IMAGE_POSITIONING * 2);
+                nextImage2.SetTargetSize(game.Settings.ImageWidth - (PIXELS_FOR_IMAGE_POSITIONING * 2), game.Settings.ImageHeight - (PIXELS_FOR_IMAGE_POSITIONING * 2));
                 nextImage2.Position     = new Vector2(selectedImage.Position.X + PIXELS_FOR_IMAGE_POSITIONING, selectedImage.Position.Y + (PIXELS_FOR_IMAGE_POSITIONING * 4));
             }
 
