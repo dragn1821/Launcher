@@ -32,6 +32,10 @@ namespace Launcher.Scenes
         [DllImport("user32.dll")]
         public static extern int SetForegroundWindow(IntPtr hwnd);
 
+        //https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-setcursorpos
+        [DllImport("user32.dll")]
+        public static extern bool SetCursorPos(int x, int y);
+
         #endregion
 
         private const int PIXELS_FOR_IMAGE_POSITIONING = 80;
@@ -302,7 +306,8 @@ namespace Launcher.Scenes
                 {
                     CloseGame("LaunchGame");
                 }
-                               
+
+                SetCursorPos(ScreenWidth + 10, 0);
                 game.Log.WriteLine($"Launching game: {Path.Combine(baseDirectory, games[selectedIndex].Slug, games[selectedIndex].Executable)}");
                 ProcessStartInfo info = new ProcessStartInfo();
                 info.WorkingDirectory = Path.Combine(baseDirectory, games[selectedIndex].Slug);
@@ -314,7 +319,7 @@ namespace Launcher.Scenes
                 currentProcess.Start();
             }
             catch(Exception exception)
-            {
+            {                
                 game.Log.WriteException(exception);
                 CurrentProcess_Exited(this, new EventArgs());                
             }
