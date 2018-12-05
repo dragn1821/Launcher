@@ -30,7 +30,7 @@ namespace GameLibrary.Graphics
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, Position, Color * Alpha);
+            spriteBatch.Draw(texture, Position, null, Color * Alpha, Rotation, Origin, Scale, SpriteEffects.None, 0f);
         }
 
         #endregion

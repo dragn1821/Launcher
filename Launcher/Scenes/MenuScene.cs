@@ -52,7 +52,7 @@ namespace Launcher.Scenes
         private Label currentGameTitle;
         private List<ResizableSprite> gameImages;
         private Sprite backgroundSprite;
-        private Bounce bounce;
+        private Bounce titleBounce;
         private GameInfo gameInfo;
         private ResizableSprite selectedImage;
         private ResizableSprite previousImage1;
@@ -65,6 +65,10 @@ namespace Launcher.Scenes
         private Rectangle titleBackground;
         private float titleBackgroundAlpha;
         private Sprite logo;
+        private Sprite upArrow;
+        private Sprite downArrow;
+        private Bounce upArrowBounce;
+        private Bounce downArrowBounce;
 
         public MenuScene(IGame game, ContentManager content, Dictionary<int, Controller> controllers) : base(game, content, controllers)
         {
@@ -87,13 +91,23 @@ namespace Launcher.Scenes
             {
                 ResourceName = "stl-arcade-jam-logo"
             };
+            this.upArrow = new Sprite()
+            {
+                ResourceName = "up-arrow"
+            };
+            this.downArrow = new Sprite()
+            {
+                ResourceName = "down-arrow"
+            };
             this.gameInfo = new GameInfo();
 
             this.baseDirectory  = game.Settings.GameDirectory.Replace('/', '\\');
             this.selectedImageHighlightAlpha = 0.7f;
             this.titleBackgroundAlpha        = 0.6f;
 
-            bounce = new Bounce(currentGameTitle, 0.05f, 1.15f);
+            titleBounce     = new Bounce(currentGameTitle, 0.05f, 1.15f);
+            upArrowBounce   = new Bounce(upArrow, 0.05f, 1.3f);
+            downArrowBounce = new Bounce(downArrow, 0.05f, 1.3f);
         }
 
         public override void LoadContent()
@@ -104,6 +118,8 @@ namespace Launcher.Scenes
             logo.LoadContent(content);
             currentGameTitle.LoadContent(content);
             gameInfo.LoadContent(content);
+            upArrow.LoadContent(content);
+            downArrow.LoadContent(content);
             pixel = content.Load<Texture2D>("1px");
 
             foreach (ResizableSprite sprite in gameImages)
@@ -117,10 +133,18 @@ namespace Launcher.Scenes
             titleBackground        = new Rectangle(0, 47, ScreenWidth, 106);
             logo.Position          = new Vector2((x / 2) - (logo.Width / 2), ScreenHeight - logo.Height);
 
+            upArrow.Origin   = new Vector2(upArrow.Width / 2, upArrow.Height / 2);
+            upArrow.Position = new Vector2(ScreenWidth - (game.Settings.ImageWidth / 2) - PIXELS_FOR_IMAGE_POSITIONING, (ScreenHeight / 2) - (game.Settings.ImageHeight / 2) - (SELECTED_PADDING / 2));
+
+            downArrow.Origin   = new Vector2(downArrow.Width / 2, downArrow.Height / 2);
+            downArrow.Position = new Vector2(ScreenWidth - (game.Settings.ImageWidth / 2) - PIXELS_FOR_IMAGE_POSITIONING, (ScreenHeight / 2) + (game.Settings.ImageHeight / 2) + (SELECTED_PADDING / 2));
+
             gameInfo.MaxGames = games.Count;
 
             UpdateCurrentGameSelection();
-            bounce.Start();
+            titleBounce.Start();
+            upArrowBounce.Start(0.085f);
+            downArrowBounce.Start(0.085f);
         }
 
         public override void UnloadContent()
@@ -180,7 +204,9 @@ namespace Launcher.Scenes
                     SetForegroundWindow(Process.GetCurrentProcess().MainWindowHandle);
                 }
 
-                bounce.Update(gameTime);
+                titleBounce.Update(gameTime);
+                upArrowBounce.Update(gameTime);
+                downArrowBounce.Update(gameTime);
             }
             else if (currentProcess != null && IsProcessInFocus() == false)
             {
@@ -199,6 +225,8 @@ namespace Launcher.Scenes
             nextImage1.Draw(gameTime, spriteBatch);
             spriteBatch.Draw(pixel, selectedImageHighlight, Color.White * selectedImageHighlightAlpha);
             selectedImage.Draw(gameTime, spriteBatch);
+            upArrow.Draw(gameTime, spriteBatch);
+            downArrow.Draw(gameTime, spriteBatch);
             spriteBatch.Draw(pixel, titleBackground, Color.Black * titleBackgroundAlpha);
             currentGameTitle.Draw(gameTime, spriteBatch);
             gameInfo.Draw(gameTime, spriteBatch);

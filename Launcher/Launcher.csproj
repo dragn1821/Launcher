@@ -66,8 +66,10 @@
     <Content Include="Content\default-image.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\down-arrow.png" />
     <Content Include="Content\stl-arcade-jam-logo.png" />
     <Content Include="Content\stl-arcade-jam-splash-screen.png" />
+    <Content Include="Content\up-arrow.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
