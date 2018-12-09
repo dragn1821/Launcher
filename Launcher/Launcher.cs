@@ -47,15 +47,15 @@ namespace Launcher
         }
 
         protected override void Initialize()
-        {            
+        {       
+            Window.Position            = new Point(0, 0);
+            Window.IsBorderless        = true;
             JsonManager<Settings> json = new JsonManager<Settings>();
             Settings                   = json.Load("settings.json");
             Log                        = new Log("Log", Settings.LogPath);
             Camera                     = new Camera(GraphicsDevice, Settings.CameraWidth, Settings.CameraHeight);
             GraphicsDisplay            = new GraphicsDisplay(graphics, Window, Camera);
             GraphicsDisplay.SetResolution(Settings.ScreenWidth, Settings.ScreenHeight);
-            Window.Position            = new Point(0, 0);
-            Window.IsBorderless        = true;
             Log.WriteLine("====> Starting Launcher.");
             Log.WriteLine("====> Initialization complete.");
             ValidateSettings();
