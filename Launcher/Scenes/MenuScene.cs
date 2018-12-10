@@ -191,6 +191,7 @@ namespace Launcher.Scenes
                     if (controllers[index].IsButton1Pressed() || controllers[index].IsButton2Pressed() || game.KeyboardInput.IsKeyPressed(Keys.Escape))
                     {
                         isInputActive = false;
+                        PlayGameSelected();
                         StopMusic();
                         LaunchGame();
                         UpdateGamePlay();
@@ -353,6 +354,11 @@ namespace Launcher.Scenes
             currentProcess.Close();
             currentProcess = null;
             game.Log.WriteLine($"{methodName}: Exiting game: {Path.Combine(baseDirectory, games[selectedIndex].Slug, games[selectedIndex].Executable)}");
+        }
+
+        private void PlayGameSelected()
+        {
+            game.Sound.PlaySoundEffect("select");
         }
 
         private void PlayMusic()

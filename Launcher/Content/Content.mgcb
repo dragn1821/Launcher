@@ -130,3 +130,9 @@
 /processorParam:TextureFormat=Color
 /build:up-arrow.png
 
+#begin chipquest.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:chipquest.wav
+

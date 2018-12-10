@@ -7,6 +7,7 @@ This project is a video game launcher application that runs as a kiosk menu for 
 - Make sure to change the configuration manager drop down from "Any CPU" to "x86".
 - The "settings.json" file has a "GameDirectory" property that needs to point to a folder that contains the games.
 - The "settings.json" file has a "MetaDataFileName" property that is the file name of the JSON file that each game must have to work with this launcher. If a game does not have this file in its folder, it will be skipped.
+- If changing a game and selecting a game to play does not play a sound effect, then install DirectX 9.0c ( https://www.microsoft.com/en-us/download/details.aspx?id=35 ).
 
 # Features:
 - Easy configuration through JSON files.
@@ -53,8 +54,10 @@ This file contains metadata on each game and is located in the game's folder.  T
 # Versions:
 - .NET 4.5
 - Monogame 3.6
+- DirectX 9.0c - Needed if sound effects do not work.  ( https://www.microsoft.com/en-us/download/details.aspx?id=35 )
 
 # Assets:
 The following assets were used from the links below.  Both are Public Domain without any copyright by the creator.
 - Music: Arcade Dash created by Rob "Splycer" Smith.
-- Sound Effect: https://opengameart.org/content/mouse-click
+- Game Change Sound Effect: https://opengameart.org/content/mouse-click
+- Game Selection Sound Effect: https://opengameart.org/content/level-up-sound-effects

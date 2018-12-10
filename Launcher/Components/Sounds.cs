@@ -14,6 +14,7 @@ namespace Launcher.Components
 
             //sound effects
             soundEffects.Add("click", content.Load<SoundEffect>("click"));
+            soundEffects.Add("select", content.Load<SoundEffect>("chipquest"));
         }
     }
 }
